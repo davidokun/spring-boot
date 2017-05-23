@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -19,14 +20,34 @@ public class ArticleController {
     private IArticleService articleService;
 
     @GetMapping("articles/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Article> getArticleById(@PathVariable("id") Integer id) {
         Article article = articleService.getArticleById(id);
         return new ResponseEntity<>(article, HttpStatus.OK);
     }
 
+    @GetMapping("articles/repo/query/{id}")
+    public ResponseEntity<Article> getArticleByIdRepoQuery(@PathVariable("id") Integer id) {
+        Article article = articleService.getArticleByIdRepoQuery(id);
+        return new ResponseEntity<>(article, HttpStatus.OK);
+    }
+
     @GetMapping("articles")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<List<Article>> getAllArticles() {
         List<Article> list = articleService.getAllArticles();
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("articles/repo")
+    public ResponseEntity<List<Article>> getAllArticlesRepo() {
+        List<Article> list = articleService.getAllArticlesRepo();
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("articles/repo/query")
+    public ResponseEntity<List<Article>> getAllArticlesRepoQuery() {
+        List<Article> list = articleService.getAllArticlesRepoQuery();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 

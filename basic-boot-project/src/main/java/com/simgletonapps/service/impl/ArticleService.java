@@ -26,10 +26,25 @@ public class ArticleService implements IArticleService {
     }
 
     @Override
+    public Article getArticleByIdRepoQuery(int articleId) {
+        return articleRepository.findArticleById(articleId);
+    }
+
+    @Override
     public List<Article> getAllArticles(){
-        //return articleDAO.getAllArticles();
+        return articleDAO.getAllArticles();
+    }
+
+    @Override
+    public List<Article> getAllArticlesRepo(){
         return (List<Article>) articleRepository.findAll();
     }
+
+    @Override
+    public List<Article> getAllArticlesRepoQuery(){
+        return articleRepository.findAllArticles();
+    }
+
 
     @Override
     public synchronized boolean addArticle(Article article){

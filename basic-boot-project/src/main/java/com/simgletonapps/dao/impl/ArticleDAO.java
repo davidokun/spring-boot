@@ -50,11 +50,11 @@ public class ArticleDAO implements IArticleDao {
 
     @Override
     public boolean articleExists(String title, String location) {
-        String hql = "FROM Article as atcl WHERE atcl.title = ? and atcl.category = ?";
+        String hql = "FROM Article as atcl WHERE atcl.title = :title and atcl.category = :category";
         int count =
                 entityManager.createQuery(hql)
-                        .setParameter(1, title)
-                        .setParameter(2, location).getResultList().size();
+                        .setParameter("title", title)
+                        .setParameter("category", location).getResultList().size();
         return count > 0 ? true : false;
     }
 }

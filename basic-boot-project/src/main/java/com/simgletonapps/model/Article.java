@@ -1,18 +1,18 @@
 package com.simgletonapps.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Version;
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Table(name = "articles")
 @XmlRootElement(name = "article")
+@NamedQueries({
+        @NamedQuery(name = "Article.findAllArticles",
+                    query = "FROM Article as a ORDER BY a.articleId"),
+        @NamedQuery(name = "Article.findArticleById",
+                    query = "FROM Article as a WHERE a.articleId = ?1")
+})
 public class Article {
 
     private static final long serialVersionUID = 1L;
