@@ -10,10 +10,9 @@ import java.util.Date;
 
 
 @Controller
-@RequestMapping("/posts")
 public class PostController {
 
-    @RequestMapping("/")
+    @RequestMapping("/posts")
     public String list(Model model){
         model.addAttribute("pageTitle","My Custom Page Title");
         model.addAttribute("posts",createPosts());
