@@ -2,15 +2,24 @@ package com.singletonapps.demospringcache.service;
 
 import com.singletonapps.demospringcache.model.Author;
 import com.singletonapps.demospringcache.model.Post;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
+@CacheConfig(cacheNames = "posts")
 public class PostService {
+
+    private static Logger LOG = LoggerFactory.getLogger(PostService.class);
 
     private List<Post> mockPosts = new ArrayList<>();
 
@@ -46,7 +55,18 @@ public class PostService {
 
     }
 
+    @Cacheable
     public List<Post> getPosts() {
+        LOG.info("Method getPosts() executed!!");
         return mockPosts;
     }
+
+    @Cacheable
+    public Optional<Post> getPostById(Long id) {
+        LOG.info("Method getPostsById() executed with Id {}", id);
+        return mockPosts.stream().filter(p -> p.getId().equals(id)).findFirst();
+    }
+
+    @CacheEvict(cacheNames = "posts", allEntries = true)
+    public void clearCache(){}
 }
