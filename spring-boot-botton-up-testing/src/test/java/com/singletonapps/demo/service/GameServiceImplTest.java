@@ -20,7 +20,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class GameServiceTest {
+public class GameServiceImplTest {
 
     @InjectMocks
     private GameServiceImpl gameService;
@@ -30,6 +30,21 @@ public class GameServiceTest {
 
     @Captor
     private ArgumentCaptor<Game> gameCaptor;
+
+    @Test
+    public void testInstantiateWithNoArgsConstructor() {
+
+        //given
+        GameServiceImpl gameServiceOther;
+
+        //when
+        gameServiceOther = new GameServiceImpl();
+
+        //then
+        assertThat(gameServiceOther).isNotNull();
+        assertThat(gameServiceOther).isExactlyInstanceOf(GameServiceImpl.class);
+
+    }
 
     @Test
     public void testGameSetTimeCreateOn() {
