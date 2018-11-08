@@ -7,6 +7,7 @@ import com.singletonapps.demo.repository.GameRepository;
 import com.singletonapps.demo.service.GameService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class GameServiceImpl implements GameService {
 
+    @Autowired
     private GameRepository gameRepository;
 
     @Override
