@@ -19,8 +19,8 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest
 @RunWith(SpringRunner.class)
+@WebMvcTest(GameController.class)
 public class GameControllerTest {
 
     @Autowired
