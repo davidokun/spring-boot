@@ -1,0 +1,9 @@
+version: "2"
+
+services:
+  
+  db:
+    build: docker/.
+    ports:
+      - 3306:3306
+    
