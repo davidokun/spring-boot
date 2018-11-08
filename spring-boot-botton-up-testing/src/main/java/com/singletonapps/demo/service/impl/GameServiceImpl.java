@@ -1,7 +1,7 @@
 package com.singletonapps.demo.service.impl;
 
 import com.singletonapps.demo.dto.GameDTO;
-import com.singletonapps.demo.dto.GameMapper;
+import com.singletonapps.demo.dto.mapper.GameMapper;
 import com.singletonapps.demo.model.Game;
 import com.singletonapps.demo.repository.GameRepository;
 import com.singletonapps.demo.service.GameService;

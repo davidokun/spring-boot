@@ -1,5 +1,6 @@
-package com.singletonapps.demo.dto;
+package com.singletonapps.demo.dto.mapper;
 
+import com.singletonapps.demo.dto.GameDTO;
 import com.singletonapps.demo.model.Game;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
