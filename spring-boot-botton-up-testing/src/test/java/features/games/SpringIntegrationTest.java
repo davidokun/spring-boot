@@ -1,4 +1,4 @@
-package features;
+package features.games;
 
 import com.singletonapps.demo.BottomUpTestingApplication;
 import org.junit.Test;

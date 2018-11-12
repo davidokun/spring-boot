@@ -1,4 +1,4 @@
-package features;
+package features.games;
 import com.singletonapps.demo.dto.GameDTO;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
