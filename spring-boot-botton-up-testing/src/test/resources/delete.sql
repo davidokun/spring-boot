@@ -1,1 +1,1 @@
-TRUNCATE TABLE game;
+TRUNCATE TABLE games_srv.game;

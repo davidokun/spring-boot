@@ -73,7 +73,7 @@ public class GameControllerTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("@.id").isNotEmpty())
             .andExpect(jsonPath("@.id").value(id))
-            .andExpect(jsonPath("@.createOn").value(now.toString()))
+            .andExpect(jsonPath("@.createOn").isNotEmpty())
             .andExpect(jsonPath("@.name").value(name))
             .andExpect(jsonPath("@.yearPublished").value(year));
     }

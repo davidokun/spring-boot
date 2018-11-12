@@ -6,7 +6,13 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.datasource.init.ScriptUtils;
+
+import javax.sql.DataSource;
+
+import java.sql.SQLException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,6 +22,9 @@ public class GameRetrievalDefs extends GameSpringIntegrationTest {
     private GameDTO.GameDTOBuilder gameDTOBuilder;
     private GameDTO gameDTO;
     private ResponseEntity<GameDTO> response;
+
+    @Autowired
+    private DataSource ds;
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -32,10 +41,11 @@ public class GameRetrievalDefs extends GameSpringIntegrationTest {
     }
 
     @And("^year published \"([^\"]*)\"$")
-    public void yearPublishedIs(String year) {
+    public void yearPublishedIs(String year) throws SQLException {
         gameDTO = gameDTOBuilder
             .yearPublished(Long.parseLong(year))
             .build();
+        ScriptUtils.executeSqlScript(ds.getConnection(), new ClassPathResource("testData.sql"));
     }
 
     @When("^user sends a GET request with parameter \"([^\"]*)\"$")
@@ -61,9 +71,11 @@ public class GameRetrievalDefs extends GameSpringIntegrationTest {
     }
 
     @And("^year published is \"([^\"]*)\"$")
-    public void yearPublished(String year) {
+    public void yearPublished(String year) throws SQLException {
         assertThat(response.getBody().getYearPublished())
             .isEqualTo(Long.parseLong(year));
+
+        ScriptUtils.executeSqlScript(ds.getConnection(), new ClassPathResource("delete.sql"));
     }
 
 }

@@ -15,3 +15,4 @@ Feature: Search by games
     Examples:
       |endpoint     | id |  name    | year  | code |
       |/games       | 1  |  Zelda   | 1998  | 200  |
+      |/games       | 2  |  Asterix   | 2001  | 200  |
