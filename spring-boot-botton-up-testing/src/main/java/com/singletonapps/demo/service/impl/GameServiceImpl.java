@@ -42,12 +42,12 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public GameDTO findById(@NotNull final Long id) {
+    public GameDTO findGameById(@NotNull final Long id) {
         Optional<Game> game = gameRepository.findById(id);
 
         return game
             .map(GameMapper.INSTANCE::gameToGameDto)
-            .orElseThrow(() -> new GameNotFoundException("Game not found"));
+            .orElseThrow(() -> new GameNotFoundException(String.format("Game with id [%s] not found", id)));
     }
 
 }

@@ -6,5 +6,5 @@ public interface GameService {
 
     GameDTO createGame(GameDTO game);
 
-    GameDTO findById(Long id);
+    GameDTO findGameById(Long id);
 }

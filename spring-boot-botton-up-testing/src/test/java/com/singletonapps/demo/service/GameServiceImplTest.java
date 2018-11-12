@@ -103,7 +103,7 @@ public class GameServiceImplTest {
         given(gameRepository.findById(id)).willReturn(Optional.of(game));
 
         //when
-        GameDTO byId = gameService.findById(id);
+        GameDTO byId = gameService.findGameById(id);
 
         //then
         assertThat(byId.getId()).isEqualTo(1);
@@ -121,7 +121,7 @@ public class GameServiceImplTest {
         given(gameRepository.findById(id)).willReturn(Optional.empty());
 
         //when
-        gameService.findById(id);
+        gameService.findGameById(id);
 
     }
 }

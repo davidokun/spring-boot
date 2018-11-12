@@ -22,7 +22,7 @@ public class GameCreationDefs extends GameSpringIntegrationTest {
     private TestRestTemplate restTemplate;
 
     @Given("^An endpoint \"([^\"]*)\"$")
-    public void anEndpoint(String endpoint) throws Throwable {
+    public void anEndpoint(String endpoint) {
         this.endpoint = endpoint;
     }
 

@@ -94,7 +94,7 @@ public class GameControllerTest {
             .createOn(now)
             .build();
 
-        BDDMockito.given(gameService.findById(id)).willReturn(game);
+        given(gameService.findGameById(id)).willReturn(game);
 
         //when
         ResultActions response = mockMvc.perform(
@@ -117,7 +117,7 @@ public class GameControllerTest {
         //given
         Long id = 0L;
         String message = "Game with id 0 Not Found";
-        BDDMockito.given(gameService.findById(id))
+        given(gameService.findGameById(id))
             .willThrow(new GameNotFoundException(message));
 
         //when

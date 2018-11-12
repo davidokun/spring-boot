@@ -21,6 +21,6 @@ public class GameControllerImpl implements GameController {
 
     @Override
     public GameDTO getGameById(@PathVariable Long id) {
-        return gameService.findById(id);
+        return gameService.findGameById(id);
     }
 }
