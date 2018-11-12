@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class GameCreationDefs extends SpringIntegrationTest {
+public class GameCreationDefs extends GameSpringIntegrationTest {
 
     private String endpoint;
     private ResponseEntity<GameDTO>  response;

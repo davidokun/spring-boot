@@ -16,7 +16,7 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TES
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration
 @Sql(scripts = "classpath:delete.sql", executionPhase = AFTER_TEST_METHOD)
-public class SpringIntegrationTest {
+public class GameSpringIntegrationTest {
 
     @Test
     public void dummy() {
