@@ -36,18 +36,16 @@ public class GameRetrievalDefs extends GameSpringIntegrationTest {
         gameDTO = gameDTOBuilder
             .yearPublished(Long.parseLong(year))
             .build();
-
-        restTemplate.postForEntity("/games", gameDTO, GameDTO.class);
     }
 
     @When("^user sends a GET request with parameter \"([^\"]*)\"$")
     public void userSendsAGETRequestWithParameter(String param) {
-        this.response = restTemplate.getForEntity(this.endpoint, GameDTO.class, param);
+        this.response = restTemplate.getForEntity(this.endpoint + "/" + param, GameDTO.class);
     }
 
     @Then("^a status code \"([^\"]*)\" is received$")
     public void aStatusCodeIsReceived(int code) {
-        assertThat(response.getStatusCode())
+        assertThat(response.getStatusCode().value())
             .isEqualTo(code);
     }
 

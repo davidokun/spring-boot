@@ -1,6 +1,8 @@
-Feature: Users can create a new game with basic information.
+Feature: Create a new Game
+  As I user
+  I want the ability to create a new game in the system.
 
-  Scenario: User send game information to be created.
+  Scenario: Create Game
     Given An endpoint "/games"
     And a game with name "Zelda" and year published 1998
     And id is null
