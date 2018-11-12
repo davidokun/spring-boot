@@ -75,4 +75,16 @@ public class GameControllerIntegrationTest {
         response
             .andExpect(status().isBadRequest());
     }
+
+    @Test
+    public void givenAGameIdShouldReturnThatGame() {
+
+        //given
+
+
+        //when
+
+        //then
+
+    }
 }

@@ -1,18 +1,17 @@
 package com.singletonapps.demo.service;
 
 import com.singletonapps.demo.dto.GameDTO;
+import com.singletonapps.demo.exception.GameNotFoundException;
 import com.singletonapps.demo.model.Game;
 import com.singletonapps.demo.repository.GameRepository;
 import com.singletonapps.demo.service.impl.GameServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.*;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -85,5 +84,44 @@ public class GameServiceImplTest {
         assertThat(gameCreated.getName()).isEqualTo(name);
         assertThat(gameCreated.getCreateOn()).isNotNull();
         assertThat(gameCreated.getCreateOn()).isEqualTo(now);
+    }
+
+    @Test
+    public void testShouldFindGameById() {
+
+        //given
+        Long id = 1L;
+        String name = "Final Fantasy";
+        long yearPublished = 1983L;
+
+        Game game = Game.builder()
+            .id(id)
+            .name(name)
+            .yearPublished(yearPublished)
+            .build();
+
+        given(gameRepository.findById(id)).willReturn(Optional.of(game));
+
+        //when
+        GameDTO byId = gameService.findById(id);
+
+        //then
+        assertThat(byId.getId()).isEqualTo(1);
+        assertThat(byId.getName()).isEqualTo(name);
+        assertThat(byId.getYearPublished()).isEqualTo(yearPublished);
+
+    }
+
+    @Test(expected = GameNotFoundException.class)
+    public void testShouldThrowGameNotFoundException() {
+
+        //given
+        Long id = 0L;
+
+        given(gameRepository.findById(id)).willReturn(Optional.empty());
+
+        //when
+        gameService.findById(id);
+
     }
 }
