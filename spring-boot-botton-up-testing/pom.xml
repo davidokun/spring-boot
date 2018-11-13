@@ -25,6 +25,7 @@
     <lombok.version>1.18.4</lombok.version>
     <map-struct>1.2.0.Final</map-struct>
     <cucumber.version>1.2.5</cucumber.version>
+    <swagger.version>2.9.2</swagger.version>
   </properties>
 
   <dependencies>
@@ -92,6 +93,19 @@
       <artifactId>rest-assured</artifactId>
       <version>3.2.0</version>
       <scope>test</scope>
+    </dependency>
+
+    <!--Swagger-->
+    <dependency>
+      <groupId>io.springfox</groupId>
+      <artifactId>springfox-swagger2</artifactId>
+      <version>${swagger.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.springfox</groupId>
+      <artifactId>springfox-swagger-ui</artifactId>
+      <version>${swagger.version}</version>
     </dependency>
   </dependencies>
 
