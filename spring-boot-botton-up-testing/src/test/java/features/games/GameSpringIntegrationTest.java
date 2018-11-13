@@ -1,11 +1,19 @@
 package features.games;
 
 import com.singletonapps.demo.BottomUpTestingApplication;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import javax.sql.DataSource;
+import java.sql.SQLException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
@@ -13,6 +21,21 @@ import org.springframework.test.context.junit4.SpringRunner;
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration
 public class GameSpringIntegrationTest {
+
+    @Autowired
+    private DataSource ds;
+
+    @Before
+    public void before() throws SQLException {
+        ScriptUtils.
+            executeSqlScript(ds.getConnection(), new ClassPathResource("testData.sql"));
+    }
+
+    @After
+    public void after() throws SQLException {
+        ScriptUtils.
+            executeSqlScript(ds.getConnection(), new ClassPathResource("delete.sql"));
+    }
 
     @Test
     public void dummy() {

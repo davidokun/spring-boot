@@ -6,11 +6,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.datasource.init.ScriptUtils;
-
-import javax.sql.DataSource;
 
 import java.sql.SQLException;
 
@@ -24,10 +20,8 @@ public class GameRetrievalDefs extends GameSpringIntegrationTest {
     private ResponseEntity<GameDTO> response;
 
     @Autowired
-    private DataSource ds;
-
-    @Autowired
     private TestRestTemplate restTemplate;
+    
 
     @Given("^an endpoint \"([^\"]*)\"$")
     public void anEndpoint(String endpoint) {
@@ -45,7 +39,6 @@ public class GameRetrievalDefs extends GameSpringIntegrationTest {
         gameDTO = gameDTOBuilder
             .yearPublished(Long.parseLong(year))
             .build();
-        ScriptUtils.executeSqlScript(ds.getConnection(), new ClassPathResource("testData.sql"));
     }
 
     @When("^user sends a GET request with parameter \"([^\"]*)\"$")
@@ -74,8 +67,40 @@ public class GameRetrievalDefs extends GameSpringIntegrationTest {
     public void yearPublished(String year) throws SQLException {
         assertThat(response.getBody().getYearPublished())
             .isEqualTo(Long.parseLong(year));
-
-        ScriptUtils.executeSqlScript(ds.getConnection(), new ClassPathResource("delete.sql"));
+    }
+    
+    // All Games
+    
+    @Given("^an endpoint for all games \"([^\"]*)\"$")
+    public void anEndpointEndpoint(String endpoint) throws SQLException {
+        this.endpoint = endpoint;
     }
 
+    @When("^I send a GET request$")
+    public void iSendAGETRequest()  {
+        this.response = restTemplate.getForEntity(this.endpoint, GameDTO.class);
+    }
+
+    @Then("^I get a status \"([^\"]*)\"$")
+    public void iGetAStatusStatus(int code)  {
+        assertThat(response.getStatusCode().value())
+            .isEqualTo(code);
+    }
+
+    @And("^a game with name \"([^\"]*)\"$")
+    public void aGameWithNameName(String name)  {
+        assertThat(response.getBody().getName()).isEqualTo(name);
+    }
+
+    @And("^year published is equal to \"([^\"]*)\"$")
+    public void yearPublishedYear(Long year)  {
+        assertThat(response.getBody().getYearPublished())
+            .isEqualTo(year);
+    }
+
+    @And("^id greater than \"([^\"]*)\"$")
+    public void idGreaterThenId(int id) throws SQLException {
+        assertThat(response.getBody().getId())
+            .isGreaterThan(id);
+    }
 }
