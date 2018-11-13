@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -50,4 +52,13 @@ public class GameServiceImpl implements GameService {
             .orElseThrow(() -> new GameNotFoundException(String.format("Game with id [%s] not found", id)));
     }
 
+    @Override
+    public List<GameDTO> findAllGames() {
+
+        List<Game> allGames = (List<Game>) gameRepository.findAll();
+
+        return allGames.stream()
+            .map(GameMapper.INSTANCE::gameToGameDto)
+            .collect(Collectors.toList());
+    }
 }

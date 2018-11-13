@@ -11,6 +11,8 @@ import org.mockito.*;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -123,5 +125,59 @@ public class GameServiceImplTest {
         //when
         gameService.findGameById(id);
 
+    }
+
+    @Test
+    public void testShouldFindAllGames() {
+
+        //given
+        List<Game> gamesRetrieved = new ArrayList<>();
+
+        Game zelda = Game.builder()
+            .id(1L)
+            .name("Zelda")
+            .yearPublished(1998L)
+            .createOn(LocalDateTime.now())
+            .build();
+
+        Game kirby = Game.builder()
+            .id(2L)
+            .name("Kirby")
+            .yearPublished(1983L)
+            .createOn(LocalDateTime.now())
+            .build();
+
+        Game mario = Game.builder()
+            .id(2L)
+            .name("Mario Bros")
+            .yearPublished(1985L)
+            .createOn(LocalDateTime.now())
+            .build();
+
+        gamesRetrieved.add(zelda);
+        gamesRetrieved.add(kirby);
+        gamesRetrieved.add(mario);
+
+        given(gameRepository.findAll()).willReturn(gamesRetrieved);
+
+        //when
+        List<GameDTO> games = gameService.findAllGames();
+
+        //then
+        assertThat(games.size()).isEqualTo(3);
+        assertThat(games.get(0).getId()).isGreaterThan(0);
+        assertThat(games.get(0).getName()).isEqualTo("Zelda");
+        assertThat(games.get(0).getYearPublished()).isEqualTo(1998);
+        assertThat(games.get(0).getCreateOn()).isNotNull();
+
+        assertThat(games.get(0).getId()).isGreaterThan(0);
+        assertThat(games.get(1).getName()).isEqualTo("Kirby");
+        assertThat(games.get(1).getYearPublished()).isEqualTo(1983);
+        assertThat(games.get(1).getCreateOn()).isNotNull();
+
+        assertThat(games.get(0).getId()).isGreaterThan(0);
+        assertThat(games.get(2).getName()).isEqualTo("Mario Bros");
+        assertThat(games.get(2).getYearPublished()).isEqualTo(1985);
+        assertThat(games.get(2).getCreateOn()).isNotNull();
     }
 }
