@@ -4,6 +4,8 @@ import com.singletonapps.demo.dto.GameDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 public interface GameController {
@@ -19,5 +21,10 @@ public interface GameController {
         value = "/games/{id}",
         produces = APPLICATION_JSON_UTF8_VALUE)
     GameDTO getGameById(@PathVariable Long id);
+
+    @GetMapping(
+        value = "/games",
+        produces = APPLICATION_JSON_UTF8_VALUE)
+    List<GameDTO> getAllGames();
 }
 

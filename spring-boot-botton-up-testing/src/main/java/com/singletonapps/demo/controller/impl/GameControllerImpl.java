@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class GameControllerImpl implements GameController {
 
@@ -22,5 +24,10 @@ public class GameControllerImpl implements GameController {
     @Override
     public GameDTO getGameById(@PathVariable Long id) {
         return gameService.findGameById(id);
+    }
+
+    @Override
+    public List<GameDTO> getAllGames() {
+        return gameService.findAllGames();
     }
 }

@@ -6,7 +6,6 @@ import com.singletonapps.demo.exception.GameNotFoundException;
 import com.singletonapps.demo.service.impl.GameServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -17,6 +16,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -131,5 +132,63 @@ public class GameControllerTest {
             .andExpect(status().isNotFound())
             .andExpect(jsonPath("@.status").value(HttpStatus.NOT_FOUND.value()))
             .andExpect(jsonPath("@.message").value(message));
+    }
+
+    @Test
+    public void testGetAllGames() throws Exception {
+
+        //given
+        List<GameDTO> gamesRetrieved = new ArrayList<>();
+
+        GameDTO zelda = GameDTO.builder()
+            .id(1L)
+            .name("Zelda")
+            .yearPublished(1998L)
+            .createOn(LocalDateTime.now())
+            .build();
+
+        GameDTO kirby = GameDTO.builder()
+            .id(2L)
+            .name("Kirby")
+            .yearPublished(1983L)
+            .createOn(LocalDateTime.now())
+            .build();
+
+        GameDTO mario = GameDTO.builder()
+            .id(2L)
+            .name("Mario Bros")
+            .yearPublished(1985L)
+            .createOn(LocalDateTime.now())
+            .build();
+
+        gamesRetrieved.add(zelda);
+        gamesRetrieved.add(kirby);
+        gamesRetrieved.add(mario);
+
+        given(gameService.findAllGames()).willReturn(gamesRetrieved);
+
+        //when
+        ResultActions response = mockMvc.perform(
+            get("/games")
+                .contentType(MediaType.APPLICATION_JSON_UTF8));
+
+        //then
+        response
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(jsonPath("@.[0].id").isNotEmpty())
+            .andExpect(jsonPath("@.[0].name").value("Zelda"))
+            .andExpect(jsonPath("@.[0].yearPublished").value(1998))
+            .andExpect(jsonPath("@.[0].createOn").isNotEmpty())
+
+            .andExpect(jsonPath("@.[1].id").isNotEmpty())
+            .andExpect(jsonPath("@.[1].name").value("Kirby"))
+            .andExpect(jsonPath("@.[1].yearPublished").value(1983))
+            .andExpect(jsonPath("@.[1].createOn").isNotEmpty())
+
+            .andExpect(jsonPath("@.[2].id").isNotEmpty())
+            .andExpect(jsonPath("@.[2].name").value("Mario Bros"))
+            .andExpect(jsonPath("@.[2].yearPublished").value(1985))
+            .andExpect(jsonPath("@.[2].createOn").isNotEmpty());
     }
 }
