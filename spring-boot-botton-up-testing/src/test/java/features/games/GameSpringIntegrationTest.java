@@ -22,21 +22,6 @@ import java.sql.SQLException;
 @ContextConfiguration
 public class GameSpringIntegrationTest {
 
-    @Autowired
-    private DataSource ds;
-
-    @Before
-    public void before() throws SQLException {
-        ScriptUtils.
-            executeSqlScript(ds.getConnection(), new ClassPathResource("testData.sql"));
-    }
-
-    @After
-    public void after() throws SQLException {
-        ScriptUtils.
-            executeSqlScript(ds.getConnection(), new ClassPathResource("delete.sql"));
-    }
-
     @Test
     public void dummy() {
 

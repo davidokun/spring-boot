@@ -18,8 +18,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -29,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @AutoConfigureMockMvc
+@Sql(scripts = "classpath:testData.sql", executionPhase = BEFORE_TEST_METHOD)
 @Sql(scripts = "classpath:delete.sql", executionPhase = AFTER_TEST_METHOD)
 public class GameControllerIntegrationTest {
 
@@ -89,18 +92,9 @@ public class GameControllerIntegrationTest {
     public void givenAGameIdShouldReturnThatGame() throws Exception {
 
         //given
-        String name = "Axelay";
-        long year = 1992L;
-        Game game = Game.builder()
-            .id(null)
-            .name(name)
-            .yearPublished(year)
-            .build();
-
-        ResponseEntity<GameDTO> post =
-            restTemplate.postForEntity("/games", game, GameDTO.class);
-
-        Long id = post.getBody().getId();
+        Long id = 3L;
+        String name = "Mario";
+        long year = 1995L;
 
         //when
         ResultActions response = mockMvc.perform(get("/games/" + id));
@@ -129,6 +123,39 @@ public class GameControllerIntegrationTest {
             .andExpect(status().isNotFound())
             .andExpect(jsonPath("@.status").value(HttpStatus.NOT_FOUND.value()))
             .andExpect(jsonPath("@.message").value("Game with id [12] not found"));
+
+    }
+
+    @Test
+    public void testShouldReturnAllGames() throws Exception {
+
+        //given
+        String endpoint = "/games";
+
+        //when
+        ResultActions response = mockMvc.perform(
+            get(endpoint)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+        );
+
+        //then
+        response
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(jsonPath("@.[0].id").isNotEmpty())
+            .andExpect(jsonPath("@.[0].name").value("Zelda"))
+            .andExpect(jsonPath("@.[0].yearPublished").value(1998))
+            .andExpect(jsonPath("@.[0].createOn").isNotEmpty())
+
+            .andExpect(jsonPath("@.[1].id").isNotEmpty())
+            .andExpect(jsonPath("@.[1].name").value("Asterix"))
+            .andExpect(jsonPath("@.[1].yearPublished").value(2001))
+            .andExpect(jsonPath("@.[1].createOn").isNotEmpty())
+
+            .andExpect(jsonPath("@.[2].id").isNotEmpty())
+            .andExpect(jsonPath("@.[2].name").value("Mario"))
+            .andExpect(jsonPath("@.[2].yearPublished").value(1995))
+            .andExpect(jsonPath("@.[2].createOn").isNotEmpty());
 
     }
 }

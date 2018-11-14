@@ -55,7 +55,7 @@ public class GameServiceImpl implements GameService {
     @Override
     public List<GameDTO> findAllGames() {
 
-        List<Game> allGames = (List<Game>) gameRepository.findAll();
+        List<Game> allGames = gameRepository.findAll();
 
         return allGames.stream()
             .map(GameMapper.INSTANCE::gameToGameDto)

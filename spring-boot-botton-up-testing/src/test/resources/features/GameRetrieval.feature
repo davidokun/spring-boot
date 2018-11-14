@@ -13,20 +13,18 @@ Feature: Search by games
     And year published is "<year>"
 
     Examples:
-      |endpoint     | id |  name    | year  | code |
-      |/games       | 1  |  Zelda   | 1998  | 200  |
+      |endpoint     | id |  name      | year  | code |
+      |/games       | 1  |  Zelda     | 1998  | 200  |
       |/games       | 2  |  Asterix   | 2001  | 200  |
+      |/games       | 3  |  Mario     | 1995  | 200  |
 
   Scenario Outline: Search All Games
     Given an endpoint for all games "<endpoint>"
     When I send a GET request
     Then I get a status "<status>"
-    And a game with name "<name>"
-    And year published is equal to "<year>"
-    And id greater than "<id>"
+    And games with names "<name1>" "<name2>" "<name3>"
+    And ids greater than "<id>"
 
     Examples:
-      |endpoint     | id |  name      | year  | status  |
-      |/games       | 0  |  Zelda     | 1998  | 200     |
-      |/games       | 0  |  Asterix   | 2001  | 200     |
-      |/games       | 0  |  Mario     | 1995  | 200     |
+      |endpoint     | id |  name1 |name2  |name3 | status  |
+      |/games       | 0  |  Zelda |Asterix|Mario | 200     |
