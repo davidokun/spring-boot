@@ -1,5 +1,6 @@
 package com.singletonapps.demo.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.singletonapps.demo.dto.GameDTO;
 import com.singletonapps.demo.exception.GameNotFoundException;
@@ -20,8 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
+import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
@@ -170,12 +173,12 @@ public class GameControllerTest {
         //when
         ResultActions response = mockMvc.perform(
             get("/games")
-                .contentType(MediaType.APPLICATION_JSON_UTF8));
+                .contentType(APPLICATION_JSON_UTF8));
 
         //then
         response
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(content().contentType(APPLICATION_JSON_UTF8))
             .andExpect(jsonPath("@.[0].id").isNotEmpty())
             .andExpect(jsonPath("@.[0].name").value("Zelda"))
             .andExpect(jsonPath("@.[0].yearPublished").value(1998))
@@ -190,5 +193,72 @@ public class GameControllerTest {
             .andExpect(jsonPath("@.[2].name").value("Mario Bros"))
             .andExpect(jsonPath("@.[2].yearPublished").value(1985))
             .andExpect(jsonPath("@.[2].createOn").isNotEmpty());
+    }
+
+    @Test
+    public void testGivenAExistentGameShoulReturnUpdatedGame() throws Exception {
+
+        //given
+        final Long id = 1L;
+        final String newName = "Candy Crush";
+        final Long newYear = 2015L;
+
+        final GameDTO gameToUpdate = GameDTO.builder()
+            .name(newName)
+            .yearPublished(newYear)
+            .build();
+
+        final GameDTO updateGame = GameDTO.builder()
+            .id(id)
+            .name(newName)
+            .yearPublished(newYear)
+            .createOn(LocalDateTime.now())
+            .build();
+
+        given(gameService.updateGame(id, gameToUpdate)).willReturn(updateGame);
+
+        //when
+        ResultActions response = mockMvc.perform(
+            put("/games/" + id)
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(mapper.writeValueAsString(gameToUpdate))
+        );
+
+        //then
+        response
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("@.id").value(id))
+            .andExpect(jsonPath("@.name").value(newName))
+            .andExpect(jsonPath("@.yearPublished").value(newYear))
+            .andExpect(jsonPath("@.createOn").isNotEmpty());
+    }
+
+    @Test
+    public void testThatUpdatingAGameWithNonExistentIdShouldReturnGameNotFound404() throws Exception {
+
+        //given
+        Long id = 502L;
+        String message = "Game with id 502 Not Found";
+        GameDTO gameToUpdate = GameDTO.builder()
+            .name("Some name")
+            .yearPublished(1900L)
+            .build();
+
+        given(gameService.updateGame(id, gameToUpdate))
+            .willThrow(new GameNotFoundException(message));
+
+        //when
+        ResultActions response = mockMvc.perform(
+            put("/games/" + id)
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(mapper.writeValueAsString(gameToUpdate))
+        );
+
+        //then
+        response
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("@.status").value(HttpStatus.NOT_FOUND.value()))
+            .andExpect(jsonPath("@.message").value(message));
+
     }
 }

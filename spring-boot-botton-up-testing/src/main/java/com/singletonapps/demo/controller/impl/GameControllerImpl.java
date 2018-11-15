@@ -30,4 +30,9 @@ public class GameControllerImpl implements GameController {
     public List<GameDTO> getAllGames() {
         return gameService.findAllGames();
     }
+
+    @Override
+    public GameDTO updateGame(final Long id, final GameDTO game) {
+        return gameService.updateGame(id, game);
+    }
 }
