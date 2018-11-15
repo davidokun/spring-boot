@@ -26,7 +26,7 @@ public class GameServiceImpl implements GameService {
     private GameRepository gameRepository;
 
     @Override
-    public GameDTO createGame(GameDTO gameDTO) {
+    public GameDTO createGame(final GameDTO gameDTO) {
 
         LocalDateTime now = LocalDateTime.now();
 

@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface GameService {
 
-    GameDTO createGame(GameDTO game);
+    GameDTO createGame(final GameDTO game);
 
     List<GameDTO> findAllGames();
 
-    GameDTO findGameById(Long id);
+    GameDTO findGameById(final Long id);
 
-    GameDTO updateGame(Long id, GameDTO gameToUpdate);
+    GameDTO updateGame(final Long id, final GameDTO gameToUpdate);
 }
