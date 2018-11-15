@@ -75,6 +75,6 @@ public class GameServiceImpl implements GameService {
 
             return GameMapper.INSTANCE.gameToGameDto(newGame);
 
-        }).orElseThrow(() -> new GameNotFoundException(String.format("Game with id [%s] not found", gameToUpdate.getId())));
+        }).orElseThrow(() -> new GameNotFoundException(String.format("Game with id [%s] not found", id)));
     }
 }

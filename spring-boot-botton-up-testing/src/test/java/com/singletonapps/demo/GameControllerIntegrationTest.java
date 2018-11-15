@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -19,11 +18,8 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
@@ -156,6 +152,61 @@ public class GameControllerIntegrationTest {
             .andExpect(jsonPath("@.[2].name").value("Mario"))
             .andExpect(jsonPath("@.[2].yearPublished").value(1995))
             .andExpect(jsonPath("@.[2].createOn").isNotEmpty());
+
+    }
+
+    @Test
+    public void testThatAnExistingGameCanBeUpdated() throws Exception {
+
+        //given
+        Long id = 1L;
+        final String newName = "Vagrant Story";
+        final Long newYear = 2001L;
+
+        GameDTO gameToUpdate = GameDTO.builder()
+            .name(newName)
+            .yearPublished(newYear)
+            .build();
+
+        //when
+        ResultActions response = mockMvc.perform(
+            put("/games/" + id)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(mapper.writeValueAsString(gameToUpdate))
+        );
+
+        //then
+        response
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(jsonPath("@.id").value(id))
+            .andExpect(jsonPath("@.name").value(newName))
+            .andExpect(jsonPath("@.yearPublished").value(newYear))
+            .andExpect(jsonPath("@.createOn").isNotEmpty());
+    }
+
+    @Test
+    public void testThatUpdateAGameWithNonExistenIdShouldRetunrNotFound404() throws Exception {
+
+        //given
+        Long id = 655L;
+        GameDTO someName = GameDTO.builder()
+            .name("SomeName")
+            .yearPublished(3500L)
+            .build();
+
+        //when
+        ResultActions response = mockMvc.perform(
+            put("/games/" + id)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(mapper.writeValueAsString(someName))
+        );
+
+        //then
+        response
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("@.status").value(HttpStatus.NOT_FOUND.value()))
+            .andExpect(jsonPath("@.message").value("Game with id [655] not found"));
 
     }
 }
