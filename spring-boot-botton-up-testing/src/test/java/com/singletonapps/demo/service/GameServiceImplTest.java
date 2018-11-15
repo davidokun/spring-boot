@@ -17,6 +17,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyObject;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -179,5 +180,59 @@ public class GameServiceImplTest {
         assertThat(games.get(2).getName()).isEqualTo("Mario Bros");
         assertThat(games.get(2).getYearPublished()).isEqualTo(1985);
         assertThat(games.get(2).getCreateOn()).isNotNull();
+    }
+
+    @Test
+    public void testGivenAnExistingGameShouldBeUpdated() {
+
+        //given
+        Long id = 1L;
+        final String newName = "Cybernator";
+        final Long newYear = 1993L;
+
+        GameDTO gameToUpdate = GameDTO.builder()
+            .id(id)
+            .name(newName)
+            .yearPublished(newYear)
+            .build();
+
+        Game currentGame = Game.builder()
+            .id(id)
+            .name("Zelda")
+            .yearPublished(1998L)
+            .build();
+
+        Game newGame = Game.builder()
+            .id(id)
+            .name(newName)
+            .yearPublished(newYear)
+            .createOn(LocalDateTime.now())
+            .build();
+
+        given(gameRepository.findById(id)).willReturn(Optional.of(currentGame));
+        given(gameRepository.save(anyObject())).willReturn(newGame);
+
+        //when
+        GameDTO updatedGame = gameService.updateGame(id, gameToUpdate);
+
+        //then
+        assertThat(updatedGame.getName()).isEqualTo(newName);
+        assertThat(updatedGame.getYearPublished()).isEqualTo(newYear);
+        assertThat(updatedGame.getCreateOn()).isNotNull();
+
+    }
+
+    @Test(expected = GameNotFoundException.class)
+    public void testGivenAGameIdThatDontExistsThrowGameNotFoundException() {
+
+        //given
+        Long id = 501L;
+        GameDTO gameToUpdate = GameDTO.builder()
+            .id(id)
+            .build();
+
+        //when
+        gameService.updateGame(id, gameToUpdate);
+
     }
 }

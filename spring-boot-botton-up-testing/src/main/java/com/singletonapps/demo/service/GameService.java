@@ -11,4 +11,6 @@ public interface GameService {
     List<GameDTO> findAllGames();
 
     GameDTO findGameById(Long id);
+
+    GameDTO updateGame(Long id, GameDTO gameToUpdate);
 }

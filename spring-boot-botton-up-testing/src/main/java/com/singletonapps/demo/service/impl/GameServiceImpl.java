@@ -61,4 +61,20 @@ public class GameServiceImpl implements GameService {
             .map(GameMapper.INSTANCE::gameToGameDto)
             .collect(Collectors.toList());
     }
+
+    @Override
+    public GameDTO updateGame(final Long id, final GameDTO gameToUpdate) {
+
+        Optional<Game> game = gameRepository.findById(id);
+
+        return game.map(g -> {
+            g.setName(gameToUpdate.getName());
+            g.setYearPublished(gameToUpdate.getYearPublished());
+
+            Game newGame = gameRepository.save(g);
+
+            return GameMapper.INSTANCE.gameToGameDto(newGame);
+
+        }).orElseThrow(() -> new GameNotFoundException(String.format("Game with id [%s] not found", gameToUpdate.getId())));
+    }
 }
