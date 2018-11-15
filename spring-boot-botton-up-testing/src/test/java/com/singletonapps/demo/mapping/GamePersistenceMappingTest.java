@@ -8,6 +8,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDateTime;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
@@ -25,6 +27,7 @@ public class GamePersistenceMappingTest {
             .id(null)
             .name("Mario Bros")
             .yearPublished(1985L)
+            .createOn(LocalDateTime.now())
             .build();
 
         //when
@@ -34,6 +37,7 @@ public class GamePersistenceMappingTest {
         assertThat(gameSaved.getId()).isEqualTo(1L);
         assertThat(gameSaved.getName()).isEqualTo("Mario Bros");
         assertThat(gameSaved.getYearPublished()).isEqualTo(1985L);
+        assertThat(gameSaved.getCreateOn()).isNotNull();
 
     }
 }
