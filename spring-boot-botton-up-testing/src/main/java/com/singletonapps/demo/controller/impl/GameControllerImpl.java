@@ -35,4 +35,9 @@ public class GameControllerImpl implements GameController {
     public GameDTO updateGame(final Long id, final GameDTO game) {
         return gameService.updateGame(id, game);
     }
+
+    @Override
+    public void deleteGame(final Long id) {
+        gameService.deleteGame(id);
+    }
 }

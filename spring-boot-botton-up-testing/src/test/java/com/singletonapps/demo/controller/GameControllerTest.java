@@ -1,6 +1,5 @@
 package com.singletonapps.demo.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.singletonapps.demo.dto.GameDTO;
 import com.singletonapps.demo.exception.GameNotFoundException;
@@ -22,9 +21,7 @@ import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
@@ -261,4 +258,23 @@ public class GameControllerTest {
             .andExpect(jsonPath("@.message").value(message));
 
     }
+
+    @Test
+    public void testDeleteGameById() throws Exception {
+
+        //given
+        Long id = 3L;
+
+        //when
+        ResultActions response = mockMvc.perform(
+            delete("/games/" + id)
+        );
+
+        //then
+        response
+            .andExpect(status().isNoContent())
+            .andExpect(content().string(""));
+
+    }
+
 }

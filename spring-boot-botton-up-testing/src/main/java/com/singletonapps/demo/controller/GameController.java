@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
@@ -41,5 +42,10 @@ public interface GameController {
     @ResponseStatus(OK)
     @ApiOperation("Update an Existing Game")
     GameDTO updateGame(@PathVariable final Long id, @Valid @RequestBody final GameDTO game);
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(NO_CONTENT)
+    @ApiOperation("Delete a Game")
+    void deleteGame(@PathVariable final Long id);
 }
 
