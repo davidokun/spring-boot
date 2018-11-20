@@ -3,6 +3,7 @@ package com.singletonapps.demo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.singletonapps.demo.dto.GameDTO;
 import com.singletonapps.demo.model.Game;
+import com.singletonapps.demo.repository.GameRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -39,6 +44,9 @@ public class GameControllerIntegrationTest {
 
     @Autowired
     private TestRestTemplate restTemplate;
+
+    @Autowired
+    private GameRepository gameRepository;
 
     @Test
     public void givenGameWhenPostGameThenCreateGameWithStatus201() throws Exception {
@@ -208,5 +216,28 @@ public class GameControllerIntegrationTest {
             .andExpect(jsonPath("@.status").value(HttpStatus.NOT_FOUND.value()))
             .andExpect(jsonPath("@.message").value("Game with id [655] not found"));
 
+    }
+
+    @Test
+    public void testDeleteAGameById() throws Exception {
+
+        //given
+        Long id = 3L;
+
+        //when
+        ResultActions response = mockMvc.perform(
+            delete("/games/" + id)
+        );
+
+        //then
+        response
+            .andExpect(status().isNoContent())
+            .andExpect(content().string(""));
+
+        Optional<Game> byId = gameRepository.findById(id);
+        List<Game> all = gameRepository.findAll();
+
+        assertThat(byId.isPresent()).isFalse();
+        assertThat(all.size()).isEqualTo(2);
     }
 }
