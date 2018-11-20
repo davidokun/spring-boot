@@ -77,4 +77,9 @@ public class GameServiceImpl implements GameService {
 
         }).orElseThrow(() -> new GameNotFoundException(String.format("Game with id [%s] not found", id)));
     }
+
+    @Override
+    public void deleteGame(@NotNull final Long id) {
+        gameRepository.deleteById(id);
+    }
 }

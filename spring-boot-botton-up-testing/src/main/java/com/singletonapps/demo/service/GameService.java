@@ -13,4 +13,6 @@ public interface GameService {
     GameDTO findGameById(final Long id);
 
     GameDTO updateGame(final Long id, final GameDTO gameToUpdate);
+
+    void deleteGame(Long id);
 }

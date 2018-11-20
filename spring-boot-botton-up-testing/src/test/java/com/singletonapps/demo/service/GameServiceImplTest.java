@@ -235,4 +235,15 @@ public class GameServiceImplTest {
         gameService.updateGame(id, gameToUpdate);
 
     }
+
+    @Test
+    public void testDeleteAGameById() {
+
+        //given
+        Long id = 4L;
+
+        //when
+        gameService.deleteGame(id);
+
+    }
 }
