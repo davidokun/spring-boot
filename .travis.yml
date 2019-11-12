@@ -1,0 +1,7 @@
+language: java
+
+script:
+  - mvn -q -B -f basic-boot-project/pom.xml clean verify
+  - mvn -q -B -f spring-boot-botton-up-testing/pom.xml clean verify
+  - mvn -q -B -f spring-boot-cache-sample/pom.xml clean verify
+  - mvn -q -B -f spring-boot-thymeleaf-demo/pom.xml clean verify
