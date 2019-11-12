@@ -1,5 +1,8 @@
 language: java
 
+jdk:
+  - openjdk8
+
 script:
   - mvn -q -B -f basic-boot-project/pom.xml clean verify
   - mvn -q -B -f spring-boot-botton-up-testing/pom.xml clean verify
