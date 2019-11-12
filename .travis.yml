@@ -1,0 +1,9 @@
+language: java
+
+matrix:
+  include:
+    - os: linux
+      jdk: openjdk8
+
+script:
+  - mvn -q -B -f currency-exchange-app/limits-service/pom.xml clean verify
