@@ -7,3 +7,4 @@ matrix:
 
 script:
   - mvn -q -B -f currency-exchange-app/limits-service/pom.xml clean verify
+  - mvn -q -B -f currency-exchange-app/config-service/pom.xml clean verify
