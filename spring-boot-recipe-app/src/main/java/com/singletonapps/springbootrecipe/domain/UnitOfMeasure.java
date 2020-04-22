@@ -11,6 +11,8 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @Getter
 @Builder
+@ToString
+@EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class UnitOfMeasure {
